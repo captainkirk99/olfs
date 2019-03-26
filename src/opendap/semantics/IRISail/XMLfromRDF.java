@@ -197,6 +197,9 @@ public class XMLfromRDF {
             
             result0 = tupleQuery.evaluate();
 
+            if(result0.hasNext()){
+            	log.debug("w00t! We got a result...");
+			}
             
             while ( result0.hasNext()) {
                 BindingSet bindingSet = (BindingSet) result0.next();
@@ -234,13 +237,10 @@ public class XMLfromRDF {
                     this.addChildren(queryString1, chd1, con,doc, valueOfobj, valueOfvalueclass);
                 } //if (bindingSet.getValue("topnameprop") 
             } //while ( result0.hasNext())
-        }catch ( QueryEvaluationException e){
-            log.error(e.getMessage());
-        }catch (RepositoryException e){
-            log.error(e.getMessage());
-        }catch (MalformedQueryException e) {
-            log.error(e.getMessage());
-        }finally{
+        } catch (QueryEvaluationException | RepositoryException | MalformedQueryException e) {
+            log.error("Caught {} message: {}",e.getClass().getSimpleName(),e.getMessage());
+        }
+        finally{
             if(result0!=null){
                 try {
                     result0.close();
@@ -456,14 +456,11 @@ public class XMLfromRDF {
 				prt.addContent(chd);
 				
 			} // while iterator.hasNext
-					 
-		}catch ( QueryEvaluationException e){
-			log.error(e.getMessage());
-		}catch (RepositoryException e){
-			log.error(e.getMessage());
-		}catch (MalformedQueryException e) {
-			log.error(e.getMessage());
-		} finally {
+
+        } catch (QueryEvaluationException | RepositoryException | MalformedQueryException e) {
+            log.error("Caught {} message: {}",e.getClass().getSimpleName(),e.getMessage());
+        }
+		finally {
             if(result!=null){
                 try {
                     result.close();

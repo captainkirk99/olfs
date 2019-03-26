@@ -25,7 +25,9 @@
  */
 package opendap.wcs.v1_1_2;
 
+import opendap.bes.BadConfigurationException;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -34,6 +36,7 @@ import org.slf4j.Logger;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -93,7 +96,8 @@ public class LocalFileCatalog implements WcsCatalog {
      * @throws Exception
      */
 
-    public void init(URL configFile, String persistentContentPath, String contextPath) throws Exception{
+    public void init(URL configFile, String persistentContentPath, String contextPath)
+            throws JDOMException, IOException, WcsException {
 
         if(intitialized)
             return;
@@ -156,7 +160,7 @@ public class LocalFileCatalog implements WcsCatalog {
 
 
 
-    private void ingestCatalog() throws Exception  {
+    private void ingestCatalog() throws IOException {
 
         String msg;
 
@@ -198,17 +202,23 @@ public class LocalFileCatalog implements WcsCatalog {
 
 
     }
-    private void ingestCoverageDescription(File file) throws Exception  {
+    private void ingestCoverageDescription(File file) {
 
-        CoverageDescription cd;
-        String msg;
-        cd = new CoverageDescription(file);
-        coverages.put(cd.getIdentifier(),cd);
-        log.info("Ingested CoverageDescription: "+cd.getIdentifier());
+        CoverageDescription cd = null;
+
+        try {
+            cd = new CoverageDescription(file);
+            coverages.put(cd.getIdentifier(),cd);
+            log.info("Ingested CoverageDescription: "+cd.getIdentifier());
+        } catch (IOException | WcsException | JDOMException e) {
+            log.error("Caught {} message: {}",e.getClass().getSimpleName(),e.getMessage());
+            log.error("FAILED to ingest CoverageDescription file: {} Skipping!",file.getAbsolutePath());
+        }
+
     }
 
-    private void ingestCoverageDescription(Element cde, long lastModified) throws Exception  {
-
+    private void ingestCoverageDescription(Element cde, long lastModified)
+            throws WcsException {
         CoverageDescription cd;
         String msg;
         cd = new CoverageDescription(cde,lastModified);

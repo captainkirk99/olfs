@@ -80,11 +80,6 @@ public class ConstructRuleEvaluator {
       * Run all Construct queries and ingest resulting statements into repository
       *
       * @param repository-repository to use
-      * @throws RepositoryException
-      */
-     /**
-      * 
-      * @param repository
       * @return
       * @throws InterruptedException
       * @throws RepositoryException
@@ -97,7 +92,7 @@ public class ConstructRuleEvaluator {
 
          GraphQueryResult graphResult = null;
          RepositoryConnection con = null;
-         Vector<Statement> Added = new Vector<Statement>();
+         Vector<Statement> Added = new Vector<>();
 
          Boolean modelChanged = true;
          int runNbr = 0;
@@ -124,7 +119,7 @@ public class ConstructRuleEvaluator {
          try {
              con = repository.getConnection();
              ValueFactory creatValue = repository.getValueFactory(); //moved from line 159
-             Hashtable<String, Double> ruleTimeTotal = new Hashtable<String, Double>();
+             Hashtable<String, Double> ruleTimeTotal = new Hashtable<>();
 
              while (modelChanged && runNbr < runNbrMax ) {
 
@@ -134,7 +129,7 @@ public class ConstructRuleEvaluator {
                  notPostProcessed1Pass = 0;
                  
                  if (runNbr == 1) {
-                     log.info("runConstruct(): Total number of construct rule(s): " + this.constructQuery.size());
+                     log.info("Total number of construct rule(s): {}", this.constructQuery.size());
                  }
                  //log.debug("Applying Construct Rules. Beginning Pass #" + runNbr
                  //        + " \n" + opendap.coreServlet.AwsUtil.getMemoryReport());
@@ -157,8 +152,8 @@ public class ConstructRuleEvaluator {
 
                      String processedQueryString = convertSWRLQueryToSeasameQuery(qstring);
                      if (runNbr == 1) {
-                         log.debug("runConstruct(): Original construct: " + qstring);
-                         log.debug("runConstruct(): Processed construct: " + processedQueryString);
+                         log.debug("Original construct:  {}", qstring);
+                         log.debug("Processed construct: {}", processedQueryString);
                      }
 
                      try {
@@ -169,7 +164,7 @@ public class ConstructRuleEvaluator {
                                  QueryLanguage.SERQL, processedQueryString);
 
                          graphResult = graphQuery.evaluate();
-                         log.debug("runConstruct(): Completed querying. ");
+                         log.debug("Completed querying.");
                          
                          ProcessController.checkState();
 
@@ -221,7 +216,7 @@ public class ConstructRuleEvaluator {
                                      break;
                                  case NONE:
                                  default:
-                                     log.debug("runConstruct(): Add statements without post-process ...");
+                                     log.debug("Adding statements without post-process...");
 
                                      con.add(graphResult, context);
                                      notPostProcessedAdded++;
@@ -236,21 +231,17 @@ public class ConstructRuleEvaluator {
 
                          } // if (graphResult.hasNext
                          else {
-                             //log.debug("runConstruct(): The construct rule returned zero statements.");
+                             log.debug("runConstruct(): The construct rule returned zero statements.");
                          }
 
-                     } catch (QueryEvaluationException e) {
-                         log.error("runConstruct(): Caught an QueryEvaluationException! Msg: " + e.getMessage());
-                     } catch (RepositoryException e) {
-                         log.error("runConstruct(): Caught RepositoryException! Msg: "+ e.getMessage());
-                     } catch (MalformedQueryException e) {
-                         log.error("runConstruct(): MalformedQuery: " + processedQueryString);
+                     } catch (QueryEvaluationException | RepositoryException | MalformedQueryException e) {
+                         log.error("Caught {} message: {}",e.getClass().getSimpleName(),e.getMessage());
                      } finally {
                          if (graphResult != null) {
                              try {
                                  graphResult.close();
                              } catch (Exception e) {
-                                     log.error("runConstruct(): Caught an " + e.getClass().getName() + " Msg: " + e.getMessage());
+                                     log.error("runConstruct(): Caught an {}  Msg: {}", e.getClass().getName(), e.getMessage());
                              }
                          }
 
@@ -326,7 +317,7 @@ public class ConstructRuleEvaluator {
         RepositoryConnection con = null;
         List<String> bindingNames;
 
-        log.debug("Locating Construct rules...");
+        log.debug("Locating Construct rules.");
 
         try {
             con = repository.getConnection();
@@ -363,28 +354,22 @@ public class ConstructRuleEvaluator {
             } else {
                 log.debug("No Construct rules found in the repository!");
             }
-        } catch (QueryEvaluationException e) {
-            log.error("Caught an QueryEvaluationException! Msg: "
-                    + e.getMessage());
-
-        } catch (RepositoryException e) {
-            log.error("Caught RepositoryException! Msg: " + e.getMessage());
-        } catch (MalformedQueryException e) {
-            log.error("Caught MalformedQueryException! Msg: " + e.getMessage());
+        } catch (QueryEvaluationException | RepositoryException | MalformedQueryException e) {
+            log.error("Caught {} message: {}",e.getClass().getSimpleName(),e.getMessage());
         }
         finally {
             if (result != null) {
                 try {
                     result.close();
-                } catch (Exception e) {
-                    log.error("runConstruct(): Caught an "+e.getClass().getName()+" Msg: " + e.getMessage());
+                } catch (QueryEvaluationException e) {
+                    log.error("Caught {} message: {}",e.getClass().getSimpleName(),e.getMessage());
                 }
             }
             if(con!=null){
                 try {
                     con.close();
                 } catch (RepositoryException e) {
-                    log.error("runConstruct(): Caught an "+e.getClass().getName()+" Msg: " + e.getMessage());
+                    log.error("Caught {} message: {}",e.getClass().getSimpleName(),e.getMessage());
                 }
             }
         }

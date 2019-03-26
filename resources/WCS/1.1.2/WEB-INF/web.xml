@@ -51,7 +51,7 @@
         
         <init-param>
             <param-name>SemanticPreload</param-name>
-            <param-value>http://xml.opendap.org/semantics/Dap_To_Wcs-1.1.owl</param-value>
+            <param-value>https://xml.opendap.org/semantics/Dap_To_Wcs-1.1.owl</param-value>
         </init-param>
 
         <init-param>

@@ -161,7 +161,7 @@ public class StaticRdfCatalog implements WcsCatalog, Runnable {
 
 
         StaticRdfCatalog catalog = new StaticRdfCatalog();
-        String semanticPreloadFile = "http://xml.opendap.org/semantics/Dap_To_Wcs-1.1.owl";
+        String semanticPreloadFile = "https://xml.opendap.org/semantics/Dap_To_Wcs-1.1.owl";
 
 
         try {
@@ -216,6 +216,7 @@ public class StaticRdfCatalog implements WcsCatalog, Runnable {
      * @param defaultCacheDirectory
      * @throws Exception
      */
+    @Override
      public void init(URL configFile, String defaultResourcePath, String defaultCacheDirectory) throws InterruptedException {
         init( configFile,  null, defaultResourcePath,  defaultCacheDirectory);
 

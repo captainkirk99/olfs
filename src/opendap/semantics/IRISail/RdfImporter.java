@@ -80,9 +80,9 @@ public class RdfImporter {
 
     public RdfImporter(String resourceDir) {
         log = org.slf4j.LoggerFactory.getLogger(this.getClass());
-        urlsToBeIgnored = new HashSet<String>();
-        imports = new Vector<String>();
-        serversDown = new Vector<String>();
+        urlsToBeIgnored = new HashSet<>();
+        imports = new Vector<>();
+        serversDown = new Vector<>();
         this.localResourceDir = resourceDir;
     }
 
@@ -135,7 +135,6 @@ public class RdfImporter {
 
             findNeededRDFDocuments(repository, rdfDocList);
             ProcessController.checkState();
-
         }
 
         return repositoryChanged;
@@ -186,8 +185,7 @@ public class RdfImporter {
                     + "rdfcache = <"
                     + Terms.rdfCacheNamespace + ">";
 
-            log.debug("findNeededRDFDocuments(): Query String: '" + queryString
-                    + "'");
+            log.debug("Query String: '{}'", queryString );
 
             TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SERQL,
                     queryString);
@@ -206,18 +204,12 @@ public class RdfImporter {
                 ) { // local owl file allowed
                     rdfDocs.add(doc);
 
-                    log.debug("Adding to rdfDocs: " + doc);
+                    log.debug("Added: {}", doc);
                 }
             }
 
-        } catch (QueryEvaluationException e) {
-            log.error("Caught an QueryEvaluationException! Msg: "
-                    + e.getMessage());
-
-        } catch (RepositoryException e) {
-            log.error("Caught RepositoryException! Msg: " + e.getMessage());
-        } catch (MalformedQueryException e) {
-            log.error("Caught MalformedQueryException! Msg: " + e.getMessage());
+        } catch (QueryEvaluationException | RepositoryException | MalformedQueryException e) {
+            log.error("Caught {} message: {}",e.getClass().getSimpleName(),e.getMessage());
         }
 
         finally {
@@ -241,8 +233,7 @@ public class RdfImporter {
 
         }
         if (rdfDocs.size() > 0)
-            log.info("findNeededRDFDocuments(): Number of needed files identified:  "
-                    + rdfDocs.size());
+            log.info("Number of needed files identified: {} ", rdfDocs.size());
 
     }
 
@@ -443,15 +434,11 @@ public class RdfImporter {
 
             }
 
-        } catch (RDFParseException e) {
-            handleImportError(e, documentURL);
-        } catch (IOException e) {
-            handleImportError(e, documentURL);
-        } catch (SaxonApiException e) {
-            handleImportError(e, documentURL);
-        } catch (JDOMException e) {
-            handleImportError(e, documentURL);
-        } catch (RepositoryException e) {
+        } catch (RDFParseException |
+                IOException |
+                SaxonApiException |
+                JDOMException |
+                RepositoryException e) {
             handleImportError(e, documentURL);
         }
         return addedDocument;
@@ -608,15 +595,11 @@ public class RdfImporter {
                 skipCount++;
 
             }// if (!serversDown.contains(myurl.getHost()))
-        } catch (RDFParseException e) {
-            handleImportError(e, documentURL);
-        } catch (IOException e) {
-            handleImportError(e, documentURL);
-        } catch (SaxonApiException e) {
-            handleImportError(e, documentURL);
-        } catch (JDOMException e) {
-            handleImportError(e, documentURL);
-        } catch (RepositoryException e) {
+        } catch (RDFParseException |
+                IOException |
+                SaxonApiException |
+                JDOMException |
+                RepositoryException e) {
             handleImportError(e, documentURL);
         }
         return addedDocument;

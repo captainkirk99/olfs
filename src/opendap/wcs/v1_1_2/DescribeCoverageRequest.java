@@ -142,7 +142,7 @@ public class DescribeCoverageRequest {
         }
         else {
             throw new WcsException("Request is missing required list of " +
-                    "Coverage identifiers.",
+                    "Coverage 'identifiers'.",
                     WcsException.MISSING_PARAMETER_VALUE,
                     "identifiers");
 

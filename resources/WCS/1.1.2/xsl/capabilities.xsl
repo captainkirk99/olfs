@@ -80,7 +80,12 @@
 
                     <td><img alt="Institution Logo" src="{concat($ServicePrefix,'/docs/images/logo.png')}" /></td>
 
-                    <td align="center"><div  class="xlarge"> Web Coverage Service</div></td>
+                    <td align="center">
+                        <div  class="xlarge"> Web Coverage Service</div>
+                        <div  class="large">
+                            WCS-<xsl:value-of select="$WcsServiceVersion" />
+                        </div>
+                    </td>
 
                 </tr></table>
                 <xsl:if test="$UpdateIsRunning">
@@ -104,7 +109,7 @@
                         </h1>
                     </xsl:when>
                     <xsl:otherwise>
-                        <h1>WCS Capabilities</h1>
+                        <h1>WCS-<xsl:value-of select="$WcsServiceVersion" /> Capabilities</h1>
                     </xsl:otherwise>
                 </xsl:choose>
                 <xsl:apply-templates select="ows:ServiceIdentification"/>

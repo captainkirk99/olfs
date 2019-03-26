@@ -196,19 +196,19 @@ public class CoverageIdGenerator {
 
             serverURL = getServerUrlString(dsu);
 
-            log.debug("getWcsIdString(): serverURl is "+serverURL);
+            log.debug("serverURl is {}", serverURL);
 
             if(serverIDs.containsKey(serverURL)){
                 // get server prefix
                 serverID = serverIDs.get(serverURL);
-                log.debug("getWcsIdString(): serverURL already in use, will reuse serverID '"+serverID+"'");
+                log.debug("serverURL already in use, will reuse serverID '{}'", serverID);
             }
             else {
                 serverID = "S"+ (serverIDs.size()+1) + "";
                 // Generate service prefix
                 // Store service prefix.
                 serverIDs.put(serverURL,serverID);
-                log.debug("getWcsIdString(): New serverURL! Created new serverID '"+serverID+"'");
+                log.debug("New serverURL! Created new serverID '{}'", serverID);
 
             }
 
@@ -217,18 +217,16 @@ public class CoverageIdGenerator {
             if(!wcsIDs.containsKey(datasetUrl)){
                 // add wcs:Identifier to MAP
                 wcsID = serverID + datasetUrl.substring(serverURL.length(),datasetUrl.length());
-                log.debug("getWcsIdString(): Dataset had no existing wcsID, adding wcsID: "+wcsID+
-                        " for dataset: "+datasetUrl);
+                log.debug("Dataset had no existing wcsID, adding wcsID: {} for dataset: {}",wcsID, datasetUrl);
                 wcsIDs.put(datasetUrl,wcsID);
             }
             else {
                 wcsID = wcsIDs.get(datasetUrl);
-                log.debug("getWcsIdString(): Dataset already has a wcsID, returning wcsID: "+wcsID+
-                        " for dataset: "+datasetUrl);
+                log.debug("Dataset already has a wcsID, returning wcsID: {} for dataset: {}",wcsID,datasetUrl);
             }
 
         } catch (MalformedURLException e) {
-            log.error("Cannot Build wcs:Identifier from URL "+datasetUrl+" error msg: "+e.getMessage());
+            log.error("Cannot Build wcs:Identifier from URL "+datasetUrl+" Error Msg: "+e.getMessage());
         }
         finally {
             genLock.unlock();
@@ -317,8 +315,7 @@ public class CoverageIdGenerator {
             }
 
         } catch (MalformedURLException e) {
-            log.error("updateIdCaches(): Caught MalformedURLException. msg: "
-                    +e.getMessage());
+            log.error("updateIdCaches(): Caught MalformedURLException. msg: {}",e.getMessage());
         }
         finally {
             genLock.unlock();

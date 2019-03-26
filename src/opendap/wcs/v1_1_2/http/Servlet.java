@@ -31,6 +31,8 @@ import opendap.http.error.BadRequest;
 import opendap.logging.LogUtil;
 import opendap.semantics.wcs.StaticRdfCatalog;
 import opendap.wcs.v1_1_2.CatalogWrapper;
+import opendap.wcs.v1_1_2.LocalFileCatalog;
+import opendap.wcs.v1_1_2.WcsCatalog;
 import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +59,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Servlet extends HttpServlet {
     private static final String SERVICE_LOG_ID = "WCS_1.2_ACCESS";
-    private static final String SIMPLE_ERROR_LOG = "Caught: {}  Message: {}";
+    private static final String SIMPLE_ERROR_LOG_FORMAT = "Caught: {}  Message: {}";
 
     private static final ReentrantLock INIT_LOCK = new ReentrantLock();
     private static final AtomicBoolean IS_INITIALIZED = new AtomicBoolean(false);
@@ -110,7 +112,9 @@ public class Servlet extends HttpServlet {
 
             installInitialContent(resourcePath, serviceContentPath);
 
-            initializeSemanticCatalog(resourcePath, serviceContentPath, configFilename, semanticPreload);
+            // initializeSemanticCatalog(resourcePath, serviceContentPath, configFilename, semanticPreload);
+
+            initializeLocalFileCatalog(resourcePath, serviceContentPath, configFilename);
 
             // Build configuration elements
             Element config = new Element("config");
@@ -139,10 +143,15 @@ public class Servlet extends HttpServlet {
     }
 
 
-    private static final String DEFAULT_WCS_SERVICE_CONFIG_FILENAME = "wcs_service.xml";
+    private static final String DEFAULT_WCS_1_1_SERVICE_CONFIG_FILENAME = "wcs-1.1-service.xml";
 
 
-    public void initializeSemanticCatalog(String resourcePath, String serviceContentPath,  String configFileName, String semanticPreload) throws ServletException {
+    public void initializeSemanticCatalog(
+            String resourcePath,
+            String serviceContentPath,
+            String configFileName,
+            String semanticPreload)
+            throws ServletException {
 
         LOG.debug("Initializing semantic WCS catalog engine...");
 
@@ -157,14 +166,42 @@ public class Servlet extends HttpServlet {
         try {
             semanticCatalog.init(serviceConfigFile, semanticPreload, resourcePath, defaultCatalogCacheDir);
         } catch (Exception e) {
-            LOG.error(SIMPLE_ERROR_LOG,e.getClass().getName(),e.getMessage());
+            LOG.error(SIMPLE_ERROR_LOG_FORMAT,e.getClass().getName(),e.getMessage());
             throw new ServletException(e);
         }
 
         try {
             CatalogWrapper.init(serviceContentPath, semanticCatalog);
         } catch (Exception e) {
-            LOG.error(SIMPLE_ERROR_LOG,e.getClass().getName(),e.getMessage());
+            LOG.error(SIMPLE_ERROR_LOG_FORMAT,e.getClass().getName(),e.getMessage());
+            throw new ServletException(e);
+        }
+        LOG.info("Initialized.");
+    }
+
+    public void initializeLocalFileCatalog(String resourcePath, String serviceContentPath,  String configFileName) throws ServletException {
+
+        LOG.debug("Initializing WCS LocalFileCatalog engine...");
+
+        URL serviceConfigFile = getServiceConfigurationUrl(serviceContentPath,configFileName);
+
+        WcsCatalog catalog = new LocalFileCatalog();
+
+        LOG.info("Using {} WCS catalog implementation.",catalog.getClass().getName());
+
+        String defaultCatalogCacheDir = serviceContentPath + catalog.getClass().getSimpleName()+"/";
+
+        try {
+            catalog.init(serviceConfigFile, resourcePath, defaultCatalogCacheDir);
+        } catch (Exception e) {
+            LOG.error(SIMPLE_ERROR_LOG_FORMAT,e.getClass().getName(),e.getMessage());
+            throw new ServletException(e);
+        }
+
+        try {
+            CatalogWrapper.init(serviceContentPath, catalog);
+        } catch (Exception e) {
+            LOG.error(SIMPLE_ERROR_LOG_FORMAT,e.getClass().getName(),e.getMessage());
             throw new ServletException(e);
         }
         LOG.info("Initialized.");
@@ -177,7 +214,7 @@ public class Servlet extends HttpServlet {
         String msg;
         URL serviceConfigUrl;
 
-        String serviceConfigFilename = _serviceContentPath + DEFAULT_WCS_SERVICE_CONFIG_FILENAME;
+        String serviceConfigFilename = _serviceContentPath + DEFAULT_WCS_1_1_SERVICE_CONFIG_FILENAME;
 
         if(configFileName!=null){
             serviceConfigFilename = _serviceContentPath + configFileName;
@@ -204,7 +241,7 @@ public class Servlet extends HttpServlet {
         try{
             serviceConfigUrl = new URL("file://" + serviceConfigFilename);
         } catch (MalformedURLException e) {
-            LOG.error(SIMPLE_ERROR_LOG,e.getClass().getName(),e.getMessage());
+            LOG.error(SIMPLE_ERROR_LOG_FORMAT,e.getClass().getName(),e.getMessage());
             throw new ServletException(e);
         }
 

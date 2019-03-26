@@ -1,4 +1,4 @@
-zxx<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ /////////////////////////////////////////////////////////////////////////////
   ~ // This file is part of the "Hyrax Data Server" project.
@@ -43,12 +43,10 @@ zxx<?xml version="1.0" encoding="UTF-8"?>
         <dataset>http://satdat1.gso.uri.edu/opendap/Pathfinder/Northwest_Pacific/6km/declouded_6km_aggregated.ncml</dataset>
         <dataset>http://satdat1.gso.uri.edu/opendap/Pathfinder/Northwest_Pacific/6km/raw_6km_aggregated.ncml</dataset>
 
-
         <dataset>http://satdat1.gso.uri.edu/opendap/Pathfinder/Northwest_Atlantic/1km/declouded_1km_aggregated.ncml</dataset>
         <dataset>http://satdat1.gso.uri.edu/opendap/Pathfinder/Northwest_Atlantic/1km/raw_1km_aggregated.ncml</dataset>
         <dataset>http://satdat1.gso.uri.edu/opendap/Pathfinder/Northwest_Atlantic/6km/declouded_6km_aggregated.ncml</dataset>
         <dataset>http://satdat1.gso.uri.edu/opendap/Pathfinder/Northwest_Atlantic/6km/raw_6km_aggregated.ncml</dataset>
-
         -->
 
 
