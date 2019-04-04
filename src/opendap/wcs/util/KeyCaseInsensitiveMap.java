@@ -24,7 +24,7 @@
  * /////////////////////////////////////////////////////////////////////////////
  */
 
-package opendap.wcs.v2_0.http;
+package opendap.wcs.util;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -107,7 +107,7 @@ public class KeyCaseInsensitiveMap<K,V> implements Map<K, V> {
     }
 
     @Override
-    public void putAll(Map<? extends K, ? extends V> m) {
+    public void putAll(Map< ? extends K, ? extends V> m) {
 
         map.putAll(m);
 

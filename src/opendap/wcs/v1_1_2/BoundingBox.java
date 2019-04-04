@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -66,10 +66,10 @@ public class BoundingBox {
     /**
      * Builds a BoundingBox from one specified in a KVP encoded WCS request.
      *
-     * @param kvp A HashMap containing the KVP.
+     * @param kvp A Map containing the KVP.
      * @throws WcsException When the KVP has issues.
      */
-    public BoundingBox(HashMap<String, String> kvp) throws WcsException {
+    public BoundingBox(Map<String, String> kvp) throws WcsException {
         log = org.slf4j.LoggerFactory.getLogger(getClass());
 
 

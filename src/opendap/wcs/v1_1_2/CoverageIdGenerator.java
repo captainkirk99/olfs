@@ -32,8 +32,8 @@ import org.slf4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -240,11 +240,11 @@ public class CoverageIdGenerator {
      * Ingests the passed HasMap into the internal caches of server ID, dataset URL, and WCS ID.
      * @param coverageIDServer
      */
-    public static void updateIdCaches(HashMap<String, Vector<String>> coverageIDServer){
+    public static void updateIdCaches(Map<String, Vector<String>> coverageIDServer){
 
         try {
             genLock.lock();
-            log.debug("Updating datasetUrl/wcsID and datasetUrl/serverID HashMap objects.");
+            log.debug("Updating datasetUrl/wcsID and datasetUrl/serverID Map objects.");
             
             String serverUrl, serviceID, localId;
 

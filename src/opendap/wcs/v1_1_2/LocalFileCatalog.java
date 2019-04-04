@@ -25,7 +25,6 @@
  */
 package opendap.wcs.v1_1_2;
 
-import opendap.bes.BadConfigurationException;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -36,7 +35,6 @@ import org.slf4j.Logger;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

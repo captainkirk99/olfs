@@ -134,7 +134,7 @@ public class WCS {
             throw new WcsException("Missing WCS version!",
                     WcsException.MISSING_PARAMETER_VALUE,"version");
         }
-        if(!CURRENT_VERSION.equals(ver)){
+        if(!CURRENT_VERSION.startsWith(ver)){
             throw new WcsException("Unsupported WCS " +
                     "version(s): "+ver,
                     WcsException.VERSION_NEGOTIATION_FAILED,"version");

@@ -29,7 +29,7 @@ import org.jdom.Element;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -118,14 +118,14 @@ public class GridCRS {
     }
 
 
-    public static boolean hasGridCRS(HashMap<String,String> kvp){
+    public static boolean hasGridCRS(Map<String,String> kvp){
         String s = kvp.get("GridBaseCRS");
         return s != null;
     }
 
 
 
-    public GridCRS(HashMap<String,String> kvp) throws WcsException {
+    public GridCRS(Map<String,String> kvp) throws WcsException {
 
         init();
         boolean hasUserGridCRS = false;

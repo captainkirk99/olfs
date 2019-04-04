@@ -52,6 +52,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -186,6 +187,12 @@ public class HttpGetHandler implements opendap.coreServlet.DispatchHandler {
         String serviceURL = Util.getServiceUrl(request);
         String query      = request.getQueryString();
 
+        Map<String, String[]> pMap = request.getParameterMap();
+        Map<String, String> kvp = new HashMap<>();
+        for(Map.Entry<String,String[]> entry: pMap.entrySet()){
+            kvp.put(entry.getKey().toLowerCase(),entry.getValue()[0]);
+        }
+
         boolean isWcsEndPoint = false;
 
         if (relativeURL != null) {
@@ -201,8 +208,8 @@ public class HttpGetHandler implements opendap.coreServlet.DispatchHandler {
                         log.debug("Sent redirect from / to "+_contextPath+"/");
                     }
                     else if(relativeURL.equals("") && q!=null){
-                        KvpHandler.processKvpWcsRequest(serviceURL, dataAccessBase,query,response);
-                        log.info("Sent WCS Response");
+                        KvpHandler.processKvpWcsRequest(serviceURL, dataAccessBase,kvp,response);
+                        log.info("Sent WCS Response for KVP request.");
                     }
                     else if(relativeURL.startsWith(_testPath)){
                         testWcsRequest(request, response);
@@ -494,7 +501,7 @@ public class HttpGetHandler implements opendap.coreServlet.DispatchHandler {
     }
 
 
-    public String getCapabilitiesTestPage(String serviceUrl, HashMap<String,String> keyValuePairs) throws InterruptedException, WcsException {
+    public String getCapabilitiesTestPage(String serviceUrl, Map<String,String> keyValuePairs) throws InterruptedException, WcsException {
 
         XMLOutputter xmlo = new XMLOutputter(Format.getPrettyFormat());
         GetCapabilitiesRequest wcsRequest = new GetCapabilitiesRequest(keyValuePairs);
@@ -519,7 +526,7 @@ public class HttpGetHandler implements opendap.coreServlet.DispatchHandler {
     }
 
 
-    public String describeCoverageTestPage(HashMap<String,String> keyValuePairs) throws InterruptedException, WcsException {
+    public String describeCoverageTestPage(Map<String,String> keyValuePairs) throws InterruptedException, WcsException {
 
         XMLOutputter xmlo = new XMLOutputter(Format.getPrettyFormat());
         DescribeCoverageRequest wcsRequest = new DescribeCoverageRequest(keyValuePairs);
@@ -547,7 +554,7 @@ public class HttpGetHandler implements opendap.coreServlet.DispatchHandler {
 
 
 
-    public String getCoverageTestPage(HttpServletRequest req, HashMap<String,String> keyValuePairs) throws InterruptedException, WcsException {
+    public String getCoverageTestPage(HttpServletRequest req, Map<String,String> keyValuePairs) throws InterruptedException, WcsException {
 
         GetCoverageRequest getCoverageRequest = new GetCoverageRequest(keyValuePairs);
         XMLOutputter xmlo = new XMLOutputter(Format.getPrettyFormat());

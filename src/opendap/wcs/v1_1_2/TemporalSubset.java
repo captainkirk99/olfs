@@ -29,8 +29,8 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  */
@@ -87,7 +87,7 @@ public class TemporalSubset {
 
 
 
-    public TemporalSubset(HashMap<String,String> kvp) throws WcsException {
+    public TemporalSubset(Map<String,String> kvp) throws WcsException {
 
         String s = kvp.get("TimeSequence");
 

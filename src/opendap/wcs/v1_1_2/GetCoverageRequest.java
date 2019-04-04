@@ -32,7 +32,7 @@ import org.jdom.output.XMLOutputter;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: ndp
@@ -114,7 +114,7 @@ public class GetCoverageRequest {
 
 
 
-    public GetCoverageRequest(HashMap<String,String> kvp)
+    public GetCoverageRequest(Map<String,String> kvp)
             throws WcsException {
 
         String s;

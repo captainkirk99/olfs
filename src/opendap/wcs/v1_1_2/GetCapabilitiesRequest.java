@@ -242,7 +242,7 @@ public class GetCapabilitiesRequest {
         if(s!=null){
             tmp = s.split(",");
             for(String ver:tmp){
-                if(WCS.CURRENT_VERSION.equals(ver)){
+                if(WCS.CURRENT_VERSION.startsWith(ver)){
                     compatible=true;
                 }
             }
